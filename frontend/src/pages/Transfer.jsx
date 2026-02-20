@@ -123,7 +123,7 @@ export default function Transfer() {
                   required
                 />
                 <div className="input-hint" style={{ marginTop: '8px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                  <strong>Hint:</strong> Try Priya's account: <code>0987654321</code> or check your other accounts in the dashboard.
+                  <strong>Hint:</strong> Try Priya's account: <code>1122334455</code> or Arjun's account: <code>1234567890</code> check your other accounts in the dashboard.
                 </div>
               </div>
 
