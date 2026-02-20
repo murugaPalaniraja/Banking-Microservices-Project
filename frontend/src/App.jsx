@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Transfer from './pages/Transfer';
 import Transactions from './pages/Transactions';
+import { Toaster } from 'react-hot-toast';
 import './App.css';
 
 function ProtectedRoute({ children }) {
@@ -34,6 +35,7 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <AppRoutes />
+        <Toaster position="top-right" />
       </AuthProvider>
     </BrowserRouter>
   );

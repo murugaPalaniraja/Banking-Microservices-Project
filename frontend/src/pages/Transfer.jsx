@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { accountApi, transactionApi } from '../services/api';
+import { toast } from 'react-hot-toast';
 
 export default function Transfer() {
   const { user, logout } = useAuth();
@@ -11,7 +12,6 @@ export default function Transfer() {
   const [toAccount, setToAccount] = useState('');
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState({ type: '', text: '' });
 
   useEffect(() => {
     fetchAccounts();
@@ -25,26 +25,25 @@ export default function Transfer() {
         setFromAccount(response.data[0].accountNumber);
       }
     } catch (err) {
-      setMessage({ type: 'error', text: 'Failed to load accounts' });
+      toast.error('Failed to load accounts');
     }
   };
 
   const handleTransfer = async (e) => {
     e.preventDefault();
-    setMessage({ type: '', text: '' });
 
     if (!fromAccount || !toAccount || !amount) {
-      setMessage({ type: 'error', text: 'Please fill in all fields' });
+      toast.error('Please fill in all fields');
       return;
     }
 
     if (parseFloat(amount) <= 0) {
-      setMessage({ type: 'error', text: 'Amount must be greater than zero' });
+      toast.error('Amount must be greater than zero');
       return;
     }
 
     if (fromAccount === toAccount) {
-      setMessage({ type: 'error', text: 'Cannot transfer to the same account' });
+      toast.error('Cannot transfer to the same account');
       return;
     }
 
@@ -55,12 +54,12 @@ export default function Transfer() {
         toAccountNumber: toAccount,
         amount: parseFloat(amount),
       });
-      setMessage({ type: 'success', text: `Transfer successful! ₹${parseFloat(amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })} sent.` });
+      toast.success(`Transfer successful! ₹${parseFloat(amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })} sent.`);
       setAmount('');
       setToAccount('');
       fetchAccounts(); // Refresh balances
     } catch (err) {
-      setMessage({ type: 'error', text: err.response?.data?.error || 'Transfer failed' });
+      toast.error(err.response?.data?.error || 'Transfer failed');
     } finally {
       setLoading(false);
     }
@@ -89,9 +88,6 @@ export default function Transfer() {
             <h2>Transfer Money</h2>
             <p className="transfer-subtitle">Send money between accounts instantly</p>
 
-            {message.text && (
-              <div className={`message ${message.type}`}>{message.text}</div>
-            )}
 
             <form onSubmit={handleTransfer}>
               <div className="form-group">
